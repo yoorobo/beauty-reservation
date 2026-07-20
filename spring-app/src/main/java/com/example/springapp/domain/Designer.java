@@ -10,18 +10,15 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class BeautyService {
+public class Designer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String serviceName;
+    private String name;
 
-    private int price;
+    private String specialty;
 
-    // SR-07 예약 겹침계산 핵심 필드
-    private int duration;
-
-    private String description;
+    private String introduction;
 }

@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>footer</title>
 </head>
 <body>
+
+<!-- 공통 하단 푸터 -->
+<footer th:fragment="footer" class="border-top py-3 mt-4">
+    <p class="text-center text-secondary small mb-0">
+        ALL RIGHT RESERVED BY <span class="text-primary fw-bold">Beauty Service</span>
+    </p>
+</footer>
 
 </body>
 </html>

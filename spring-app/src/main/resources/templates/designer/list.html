@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>디자이너 목록</title>
+</head>
+<body>
+<!-- W-09 GET /designers : 디자이너 목록 화면 [SR-05] 이름·전문분야·소개 -->
+<main class="container py-4">
+    <h1 class="h3 mb-4">디자이너 목록</h1>
+    <table class="table table-hover align-middle">
+        <thead>
+        <tr>
+            <th>이름</th>
+            <th>전문분야</th>
+            <th>소개</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="d : ${designers}">
+            <td th:text="${d.name}">이름</td>
+            <td th:text="${d.specialty}">전문분야</td>
+            <td th:text="${d.introduction}">소개</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(designers)}">
+            <td colspan="3" class="text-center text-secondary">등록된 디자이너가 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

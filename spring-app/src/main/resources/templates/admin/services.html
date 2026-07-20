@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>시술 관리</title>
+</head>
+<body>
+<!-- W-16 GET/POST /admin/services : 시술 관리(등록·수정·삭제) [SR-11] -->
+<main class="container py-4">
+    <h1 class="h3 mb-4">시술 관리</h1>
+
+    <!-- 목록 테이블 -->
+    <table class="table table-hover align-middle">
+        <thead>
+        <tr>
+            <th>이름</th>
+            <th>가격</th>
+            <th>소요시간(분)</th>
+            <th>설명</th>
+            <th class="text-end">관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s : ${services}">
+            <td th:text="${s.serviceName}">서비스명</td>
+            <td th:text="${#numbers.formatInteger(s.price, 0, 'COMMA')} + '원'">0원</td>
+            <td th:text="${s.duration}">0</td>
+            <td th:text="${s.description}">설명</td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-secondary"
+                   th:href="@{/admin/services/{id}/edit(id=${s.id})}">수정</a>
+                <form class="d-inline" method="post"
+                      th:action="@{/admin/services/{id}/delete(id=${s.id})}"
+                      onsubmit="return confirm('삭제하시겠습니까?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(services)}">
+            <td colspan="5" class="text-center text-secondary">등록된 시술이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 등록/수정 폼 (editId 존재 시 수정 모드) -->
+    <hr class="my-4">
+    <h2 class="h5 mb-3" th:text="${editId} != null ? '시술 수정' : '시술 등록'">시술 등록</h2>
+    <form method="post"
+          th:action="${editId} != null ? @{/admin/services/{id}/update(id=${editId})} : @{/admin/services}"
+          th:object="${form}">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">이름</label>
+                <input type="text" class="form-control" th:field="*{serviceName}">
+                <div class="text-danger small" th:if="${#fields.hasErrors('serviceName')}"
+                     th:errors="*{serviceName}">이름 오류</div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">가격</label>
+                <input type="number" class="form-control" th:field="*{price}">
+                <div class="text-danger small" th:if="${#fields.hasErrors('price')}"
+                     th:errors="*{price}">가격 오류</div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">소요시간(분)</label>
+                <input type="number" class="form-control" th:field="*{duration}">
+                <div class="text-danger small" th:if="${#fields.hasErrors('duration')}"
+                     th:errors="*{duration}">소요시간 오류</div>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">설명</label>
+                <input type="text" class="form-control" th:field="*{description}">
+            </div>
+        </div>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary"
+                    th:text="${editId} != null ? '수정' : '등록'">등록</button>
+            <a th:if="${editId} != null" class="btn btn-outline-secondary"
+               href="/admin/services">취소</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

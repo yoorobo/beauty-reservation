@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>디자이너 관리</title>
+</head>
+<body>
+<!-- W-17 GET/POST /admin/designers : 디자이너 관리(등록·수정·삭제) [SR-11] -->
+<main class="container py-4">
+    <h1 class="h3 mb-4">디자이너 관리</h1>
+
+    <!-- 목록 테이블 -->
+    <table class="table table-hover align-middle">
+        <thead>
+        <tr>
+            <th>이름</th>
+            <th>전문분야</th>
+            <th>소개</th>
+            <th class="text-end">관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="d : ${designers}">
+            <td th:text="${d.name}">이름</td>
+            <td th:text="${d.specialty}">전문분야</td>
+            <td th:text="${d.introduction}">소개</td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-secondary"
+                   th:href="@{/admin/designers/{id}/edit(id=${d.id})}">수정</a>
+                <form class="d-inline" method="post"
+                      th:action="@{/admin/designers/{id}/delete(id=${d.id})}"
+                      onsubmit="return confirm('삭제하시겠습니까?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(designers)}">
+            <td colspan="4" class="text-center text-secondary">등록된 디자이너가 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 등록/수정 폼 (editId 존재 시 수정 모드) -->
+    <hr class="my-4">
+    <h2 class="h5 mb-3" th:text="${editId} != null ? '디자이너 수정' : '디자이너 등록'">디자이너 등록</h2>
+    <form method="post"
+          th:action="${editId} != null ? @{/admin/designers/{id}/update(id=${editId})} : @{/admin/designers}"
+          th:object="${form}">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">이름</label>
+                <input type="text" class="form-control" th:field="*{name}">
+                <div class="text-danger small" th:if="${#fields.hasErrors('name')}"
+                     th:errors="*{name}">이름 오류</div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">전문분야</label>
+                <input type="text" class="form-control" th:field="*{specialty}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">소개</label>
+                <input type="text" class="form-control" th:field="*{introduction}">
+            </div>
+        </div>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary"
+                    th:text="${editId} != null ? '수정' : '등록'">등록</button>
+            <a th:if="${editId} != null" class="btn btn-outline-secondary"
+               href="/admin/designers">취소</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

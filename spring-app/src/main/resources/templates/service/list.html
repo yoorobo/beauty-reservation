@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>시술 목록</title>
+</head>
+<body>
+<!-- W-08 GET /services : 시술 목록 화면 [SR-04] 이름·가격·소요시간(분)·설명 -->
+<main class="container py-4">
+    <h1 class="h3 mb-4">시술 목록</h1>
+    <table class="table table-hover align-middle">
+        <thead>
+        <tr>
+            <th>이름</th>
+            <th>가격</th>
+            <th>소요시간(분)</th>
+            <th>설명</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s : ${services}">
+            <td th:text="${s.serviceName}">서비스명</td>
+            <td th:text="${#numbers.formatInteger(s.price, 0, 'COMMA')} + '원'">0원</td>
+            <td th:text="${s.duration}">0</td>
+            <td th:text="${s.description}">설명</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(services)}">
+            <td colspan="4" class="text-center text-secondary">등록된 시술이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
