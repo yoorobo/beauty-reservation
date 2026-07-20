@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: spring-app
+  datasource:
+    url: jdbc:mysql://localhost:3306/beauty_service?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug   #Hibernate가 실행하는 SQL 문을 출력
+    org.hibernate.orm.jdbc.bind: trace   # 실제 어떤값이 바인딩 되는지 알려준다.
