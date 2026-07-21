@@ -8,10 +8,11 @@
 <main class="container py-4">
     <h1 class="h3 mb-4">디자이너 관리</h1>
 
-    <!-- 등록/수정 폼 (editId 존재 시 수정 모드) [B5] -->
+    <!-- 등록/수정 폼 (designerForm.id 존재 시 수정 모드) [B5] — POST /admin/designers 통합, hidden id로 분기 -->
     <form method="post"
-          th:action="${editId} != null ? @{/admin/designers/{id}/update(id=${editId})} : @{/admin/designers}"
+          th:action="@{/admin/designers}"
           th:object="${designerForm}">
+        <input type="hidden" th:field="*{id}">
 
         <!-- 상단 빨간 알림 박스: 오류 메시지 목록 -->
         <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
@@ -22,25 +23,40 @@
 
         <!-- 입력칸 3개 + 등록/수정 버튼 : 가로 1행, 라벨 없이 placeholder [B5] -->
         <div class="row g-2 align-items-start">
-            <div class="col-12 col-lg">
+            <div class="col-12 col-md">
                 <input type="text" class="form-control" placeholder="이름" th:field="*{name}">
                 <div class="text-danger small" th:if="${#fields.hasErrors('name')}"
                      th:errors="*{name}">이름 오류</div>
             </div>
-            <div class="col-12 col-lg">
-                <input type="text" class="form-control" placeholder="전문분야" th:field="*{specialty}">
+            <div class="col-12 col-md">
+                <!-- 전문 분야: 직접 입력 → 드롭다운 선택 (빈 값이면 @NotBlank 검증 작동) -->
+                <select class="form-select" th:field="*{specialty}">
+                    <option value="">전문 분야 선택</option>
+                    <option value="헤어">헤어</option>
+                    <option value="피부관리">피부관리</option>
+                    <option value="네일">네일</option>
+                    <option value="메이크업">메이크업</option>
+                    <option value="왁싱">왁싱</option>
+                    <option value="속눈썹">속눈썹</option>
+                    <option value="두피케어">두피케어</option>
+                    <option value="웨딩케어">웨딩케어</option>
+                </select>
+                <div class="text-danger small" th:if="${#fields.hasErrors('specialty')}"
+                     th:errors="*{specialty}">전문분야 오류</div>
             </div>
-            <div class="col-12 col-lg">
+            <div class="col-12 col-md">
                 <input type="text" class="form-control" placeholder="소개" th:field="*{introduction}">
             </div>
-            <div class="col-12 col-lg-auto">
+            <div class="col-12 col-md-auto">
                 <!-- 수정 모드: btn-warning(노랑) / 등록 모드: btn-primary(파랑) [B5] -->
-                <!-- lg 미만: 전체 폭(w-100) 세로 스택 / lg 이상: col-lg-auto 폭 = 버튼 크기라 외형 동일 -->
-                <button type="submit" class="btn w-100"
-                        th:classappend="${editId} != null ? 'btn-warning' : 'btn-primary'"
-                        th:text="${editId} != null ? '수정' : '등록'">등록</button>
-                <a th:if="${editId} != null" class="btn btn-outline-secondary"
-                   href="/admin/designers">취소</a>
+                <!-- 현대 UI 관례: 취소(보조·왼쪽) → 수정/등록(기본·오른쪽), d-flex로 항상 같은 줄 -->
+                <div class="d-flex gap-2">
+                    <a th:if="${designerForm.id} != null" class="btn btn-outline-secondary flex-fill"
+                       href="/admin/designers">취소</a>
+                    <button type="submit" class="btn flex-fill"
+                            th:classappend="${designerForm.id} != null ? 'btn-warning' : 'btn-primary'"
+                            th:text="${designerForm.id} != null ? '수정' : '등록'">등록</button>
+                </div>
             </div>
         </div>
     </form>
@@ -56,8 +72,11 @@
             <td class="text-end">
                 <a class="btn btn-sm btn-outline-secondary"
                    th:href="@{/admin/designers/{id}/edit(id=${designer.id})}">수정</a>
-                <a class="btn btn-sm btn-outline-danger"
-                   th:href="@{/admin/designers/{id}/delete(id=${designer.id})}">삭제</a>
+                <form class="d-inline" method="post"
+                      th:action="@{/admin/designers/{id}/delete(id=${designer.id})}"
+                      onsubmit="return confirm('삭제하시겠습니까?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                </form>
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(designers)}">

@@ -1,5 +1,6 @@
 <!-- 공통 상단 내비게이션 (IS 기준 메뉴 자리표시자) -->
-<nav th:fragment="navbarFragment" class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+<!-- 강사 표준 정렬(0721): 시술·디자이너 링크 제거, 메뉴 전체 우측 정렬, 내예약→내 예약, 로그아웃 outline 버튼 -->
+<nav th:fragment="navbarFragment" class="navbar navbar-expand-md navbar-light bg-light border-bottom">
     <div class="container">
         <a class="navbar-brand fw-bold" href="/">Beauty Service</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -8,19 +9,17 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navMenu">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="/services">시술</a></li>
-                <li class="nav-item"><a class="nav-link" href="/designers">디자이너</a></li>
-                <!-- TODO D5: 예약하기·내예약 (예약 엔티티 생성 후 연결) -->
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <!-- TODO D5: 예약하기·내 예약 (예약 엔티티 생성 후 연결) -->
                 <li class="nav-item"><a class="nav-link" href="#">예약하기</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">내예약</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">내 예약</a></li>
                 <li class="nav-item"><a class="nav-link" href="/admin/services">관리자</a></li>
-            </ul>
-            <ul class="navbar-nav">
                 <!-- TODO D3: 로그인·회원가입·로그아웃 (Spring Security 적용 후 연결) -->
                 <li class="nav-item"><a class="nav-link" href="#">로그인</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">회원가입</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">로그아웃</a></li>
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-outline-secondary btn-sm" href="#">로그아웃</a>
+                </li>
             </ul>
         </div>
     </div>

@@ -8,10 +8,11 @@
 <main class="container py-5">
     <h1 class="h3 mb-4">시술 관리</h1>
 
-    <!-- 등록/수정 폼 (editId 존재 시 수정 모드) [S1·B1·B2·B4] -->
+    <!-- 등록/수정 폼 (beautyServiceForm.id 존재 시 수정 모드) [S1·B1·B2·B4] — POST /admin/services 통합, hidden id로 분기 -->
     <form method="post"
-          th:action="${editId} != null ? @{/admin/services/{id}/update(id=${editId})} : @{/admin/services}"
+          th:action="@{/admin/services}"
           th:object="${beautyServiceForm}">
+        <input type="hidden" th:field="*{id}">
 
         <!-- 상단 빨간 알림 박스: 오류 메시지 목록 [S3] -->
         <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
@@ -22,31 +23,31 @@
 
         <!-- 입력칸 4개 + 등록/수정 버튼 : 가로 1행, 라벨 없이 placeholder [B1·B2] -->
         <div class="row g-2 align-items-start">
-            <div class="col-12 col-lg">
+            <div class="col-12 col-md">
                 <input type="text" class="form-control" placeholder="시술명" th:field="*{serviceName}">
                 <div class="text-danger small" th:if="${#fields.hasErrors('serviceName')}"
                      th:errors="*{serviceName}">시술명 오류</div>
             </div>
-            <div class="col-12 col-lg">
+            <div class="col-12 col-md">
                 <input type="number" class="form-control" placeholder="가격" th:field="*{price}">
                 <div class="text-danger small" th:if="${#fields.hasErrors('price')}"
                      th:errors="*{price}">가격 오류</div>
             </div>
-            <div class="col-12 col-lg">
+            <div class="col-12 col-md">
                 <input type="number" class="form-control" placeholder="소요시간" th:field="*{duration}">
                 <div class="text-danger small" th:if="${#fields.hasErrors('duration')}"
                      th:errors="*{duration}">소요시간 오류</div>
             </div>
-            <div class="col-12 col-lg">
+            <div class="col-12 col-md">
                 <input type="text" class="form-control" placeholder="설명" th:field="*{description}">
             </div>
-            <div class="col-12 col-lg-auto">
+            <div class="col-12 col-md-auto">
                 <!-- 수정 모드: btn-warning(노랑) / 등록 모드: btn-primary(파랑) [B4] -->
-                <!-- lg 미만: 전체 폭(w-100) 세로 스택 / lg 이상: col-lg-auto 폭 = 버튼 크기라 외형 동일 -->
+                <!-- md 미만: 전체 폭(w-100) 세로 스택 / md 이상: col-md-auto 폭 = 버튼 크기라 외형 동일 -->
                 <button type="submit" class="btn w-100"
-                        th:classappend="${editId} != null ? 'btn-warning' : 'btn-primary'"
-                        th:text="${editId} != null ? '수정' : '등록'">등록</button>
-                <a th:if="${editId} != null" class="btn btn-outline-secondary"
+                        th:classappend="${beautyServiceForm.id} != null ? 'btn-warning' : 'btn-primary'"
+                        th:text="${beautyServiceForm.id} != null ? '수정' : '등록'">등록</button>
+                <a th:if="${beautyServiceForm.id} != null" class="btn btn-outline-secondary"
                    href="/admin/services">취소</a>
             </div>
         </div>
@@ -63,8 +64,11 @@
             <td class="text-end">
                 <a class="btn btn-sm btn-outline-secondary"
                    th:href="@{/admin/services/{id}/edit(id=${service.id})}">수정</a>
-                <a class="btn btn-sm btn-outline-danger"
-                   th:href="@{/admin/services/{id}/delete(id=${service.id})}">삭제</a>
+                <form class="d-inline" method="post"
+                      th:action="@{/admin/services/{id}/delete(id=${service.id})}"
+                      onsubmit="return confirm('삭제하시겠습니까?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                </form>
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(services)}">
