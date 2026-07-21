@@ -8,9 +8,10 @@ import lombok.Setter;
 @Setter
 public class DesignerForm {
 
-    @NotBlank
+    @NotBlank(message = "이름을 입력해주세요.")
     private String name;
 
+    // 시술 스펙 준용(설명 무검증) : 전문분야·소개는 검증 없음 [B5]
     private String specialty;
 
     private String introduction;

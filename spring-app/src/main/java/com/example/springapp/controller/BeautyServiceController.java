@@ -30,13 +30,13 @@ public class BeautyServiceController {
     @GetMapping("/admin/services")
     public String adminList(Model model) {
         model.addAttribute("services", beautyServiceService.findAll());
-        model.addAttribute("form", new BeautyServiceForm());
+        model.addAttribute("beautyServiceForm", new BeautyServiceForm());
         return "admin/services";
     }
 
     // W-16 POST /admin/services — 등록 [SR-11]
     @PostMapping("/admin/services")
-    public String create(@Valid @ModelAttribute("form") BeautyServiceForm form,
+    public String create(@Valid @ModelAttribute("beautyServiceForm") BeautyServiceForm form,
                          BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("services", beautyServiceService.findAll());
@@ -56,7 +56,7 @@ public class BeautyServiceController {
         form.setDuration(service.getDuration());
         form.setDescription(service.getDescription());
         model.addAttribute("services", beautyServiceService.findAll());
-        model.addAttribute("form", form);
+        model.addAttribute("beautyServiceForm", form);
         model.addAttribute("editId", id);
         return "admin/services";
     }
@@ -64,7 +64,7 @@ public class BeautyServiceController {
     // W-16 POST /admin/services/{id}/update — 수정 [SR-11]
     @PostMapping("/admin/services/{id}/update")
     public String update(@PathVariable Long id,
-                         @Valid @ModelAttribute("form") BeautyServiceForm form,
+                         @Valid @ModelAttribute("beautyServiceForm") BeautyServiceForm form,
                          BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("services", beautyServiceService.findAll());
@@ -75,8 +75,8 @@ public class BeautyServiceController {
         return "redirect:/admin/services";
     }
 
-    // W-16 POST /admin/services/{id}/delete — 삭제 [SR-11]
-    @PostMapping("/admin/services/{id}/delete")
+    // W-16 GET /admin/services/{id}/delete — 삭제 [SR-11] (login 관례: <a> GET 링크)
+    @GetMapping("/admin/services/{id}/delete")
     public String delete(@PathVariable Long id) {
         beautyServiceService.delete(id);
         return "redirect:/admin/services";

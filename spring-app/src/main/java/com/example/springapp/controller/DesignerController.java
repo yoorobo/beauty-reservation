@@ -30,13 +30,13 @@ public class DesignerController {
     @GetMapping("/admin/designers")
     public String adminList(Model model) {
         model.addAttribute("designers", designerService.findAll());
-        model.addAttribute("form", new DesignerForm());
+        model.addAttribute("designerForm", new DesignerForm());
         return "admin/designers";
     }
 
     // W-17 POST /admin/designers — 등록 [SR-11]
     @PostMapping("/admin/designers")
-    public String create(@Valid @ModelAttribute("form") DesignerForm form,
+    public String create(@Valid @ModelAttribute("designerForm") DesignerForm form,
                          BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("designers", designerService.findAll());
@@ -55,7 +55,7 @@ public class DesignerController {
         form.setSpecialty(designer.getSpecialty());
         form.setIntroduction(designer.getIntroduction());
         model.addAttribute("designers", designerService.findAll());
-        model.addAttribute("form", form);
+        model.addAttribute("designerForm", form);
         model.addAttribute("editId", id);
         return "admin/designers";
     }
@@ -63,7 +63,7 @@ public class DesignerController {
     // W-17 POST /admin/designers/{id}/update — 수정 [SR-11]
     @PostMapping("/admin/designers/{id}/update")
     public String update(@PathVariable Long id,
-                         @Valid @ModelAttribute("form") DesignerForm form,
+                         @Valid @ModelAttribute("designerForm") DesignerForm form,
                          BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("designers", designerService.findAll());
@@ -74,8 +74,8 @@ public class DesignerController {
         return "redirect:/admin/designers";
     }
 
-    // W-17 POST /admin/designers/{id}/delete — 삭제 [SR-11]
-    @PostMapping("/admin/designers/{id}/delete")
+    // W-17 GET /admin/designers/{id}/delete — 삭제 [SR-11] (login 관례: <a> GET 링크)
+    @GetMapping("/admin/designers/{id}/delete")
     public String delete(@PathVariable Long id) {
         designerService.delete(id);
         return "redirect:/admin/designers";

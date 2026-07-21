@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<html lang="ko" th:replace="~{layout :: layout(~{::title}, ~{::main}, ~{::script})}">
 <head>
     <title>시술 목록</title>
 </head>
@@ -18,11 +17,11 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="s : ${services}">
-            <td th:text="${s.serviceName}">서비스명</td>
-            <td th:text="${#numbers.formatInteger(s.price, 0, 'COMMA')} + '원'">0원</td>
-            <td th:text="${s.duration}">0</td>
-            <td th:text="${s.description}">설명</td>
+        <tr th:each="service : ${services}">
+            <td th:text="${service.serviceName}">서비스명</td>
+            <td th:text="${#numbers.formatInteger(service.price, 0, 'COMMA')} + '원'">0원</td>
+            <td th:text="${service.duration}">0</td>
+            <td th:text="${service.description}">설명</td>
         </tr>
         <tr th:if="${#lists.isEmpty(services)}">
             <td colspan="4" class="text-center text-secondary">등록된 시술이 없습니다.</td>
@@ -30,5 +29,6 @@
         </tbody>
     </table>
 </main>
+<script></script>
 </body>
 </html>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<html lang="ko" th:replace="~{layout :: layout(~{::title}, ~{::main}, ~{::script})}">
 <head>
     <title>디자이너 목록</title>
 </head>
@@ -17,10 +16,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="d : ${designers}">
-            <td th:text="${d.name}">이름</td>
-            <td th:text="${d.specialty}">전문분야</td>
-            <td th:text="${d.introduction}">소개</td>
+        <tr th:each="designer : ${designers}">
+            <td th:text="${designer.name}">이름</td>
+            <td th:text="${designer.specialty}">전문분야</td>
+            <td th:text="${designer.introduction}">소개</td>
         </tr>
         <tr th:if="${#lists.isEmpty(designers)}">
             <td colspan="3" class="text-center text-secondary">등록된 디자이너가 없습니다.</td>
@@ -28,5 +27,6 @@
         </tbody>
     </table>
 </main>
+<script></script>
 </body>
 </html>
