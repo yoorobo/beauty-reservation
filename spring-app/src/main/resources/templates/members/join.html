@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" th:replace="~{layout :: layout(~{::title}, ~{::main}, ~{::script})}">
+<head>
+    <title>회원가입</title>
+</head>
+<body>
+<!-- D3(SR-03): 회원가입 [SR-03] -->
+<main class="container py-5" style="max-width: 480px;">
+    <h1 class="h3 mb-4">회원가입</h1>
+
+    <form method="post" th:action="@{/members/join}" th:object="${memberForm}">
+        <!-- 상단 오류 알림 박스 (관례 준수) -->
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+            <ul class="mb-0">
+                <li th:each="err : ${#fields.errors('*')}" th:text="${err}">오류 메시지</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="이름" th:field="*{name}">
+            <div class="text-danger small" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">이름 오류</div>
+        </div>
+        <div class="mb-3">
+            <input type="email" class="form-control" placeholder="이메일" th:field="*{email}">
+            <div class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">이메일 오류</div>
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" placeholder="비밀번호 (8~20자)" th:field="*{password}">
+            <div class="text-danger small" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">비밀번호 오류</div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">가입하기</button>
+    </form>
+</main>
+<script></script>
+</body>
+</html>

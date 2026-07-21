@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" th:replace="~{layout :: layout(~{::title}, ~{::main}, ~{::script})}">
+<head>
+    <title>회원 상세</title>
+</head>
+<body>
+<!-- D3(SR-03): 관리자 회원 상세 -->
+<main class="container py-4" style="max-width: 560px;">
+    <h1 class="h3 mb-4">회원 상세</h1>
+    <table class="table">
+        <tbody>
+        <tr><th style="width:30%">ID</th><td th:text="${member.id}">1</td></tr>
+        <tr><th>이름</th><td th:text="${member.name}">이름</td></tr>
+        <tr><th>이메일</th><td th:text="${member.email}">이메일</td></tr>
+        <tr><th>권한</th>
+            <td><span class="badge"
+                      th:classappend="${member.role.name() == 'ADMIN'} ? 'bg-danger' : 'bg-secondary'"
+                      th:text="${member.role}">USER</span></td></tr>
+        <tr><th>가입유형</th><td th:text="${member.provider}">LOCAL</td></tr>
+        </tbody>
+    </table>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary" th:href="@{/admin/members}">목록</a>
+        <a class="btn btn-primary" th:href="@{/admin/members/{id}/edit(id=${member.id})}">수정</a>
+    </div>
+</main>
+<script></script>
+</body>
+</html>

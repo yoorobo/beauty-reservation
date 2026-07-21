@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-// TODO ADMIN 권한 D3에서 적용 (/admin/** 는 SecurityConfig 생성 후 ADMIN 전용으로 제한)
+// D3(SR-03) 적용 완료: /admin/** 는 SecurityConfig에서 ADMIN 전용으로 제한
 // W-16 시술 관리(등록·수정·삭제) [SR-11] — 강사 구조: 클래스 @RequestMapping + 메서드 상대경로
 @Controller
 @RequiredArgsConstructor

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" th:replace="~{layout :: layout(~{::title}, ~{::main}, ~{::script})}">
+<head>
+    <title>회원 관리</title>
+</head>
+<body>
+<!-- D3(SR-03): 관리자 회원 목록 (권한 배지 + 상세·수정·삭제) -->
+<main class="container py-4">
+    <h1 class="h3 mb-4">회원 관리</h1>
+    <table class="table table-hover align-middle">
+        <thead>
+        <tr>
+            <th>이름</th><th>이메일</th><th>권한</th><th class="text-end">관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="m : ${members}">
+            <td th:text="${m.name}">이름</td>
+            <td th:text="${m.email}">이메일</td>
+            <td>
+                <span class="badge"
+                      th:classappend="${m.role.name() == 'ADMIN'} ? 'bg-danger' : 'bg-secondary'"
+                      th:text="${m.role}">USER</span>
+            </td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-primary"
+                   th:href="@{/admin/members/{id}(id=${m.id})}">상세</a>
+                <a class="btn btn-sm btn-outline-secondary"
+                   th:href="@{/admin/members/{id}/edit(id=${m.id})}">수정</a>
+                <form class="d-inline" method="post"
+                      th:action="@{/admin/members/{id}/delete(id=${m.id})}"
+                      onsubmit="return confirm('삭제하시겠습니까?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(members)}">
+            <td colspan="4" class="text-center text-secondary">회원이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<script></script>
+</body>
+</html>

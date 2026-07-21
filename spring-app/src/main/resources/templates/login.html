@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" th:replace="~{layout :: layout(~{::title}, ~{::main}, ~{::script})}">
+<head>
+    <title>로그인</title>
+</head>
+<body>
+<!-- D3(SR-03·B4): 커스텀 로그인 페이지 (formLogin.loginPage="/login") -->
+<main class="container py-5" style="max-width: 420px;">
+    <h1 class="h3 mb-4">로그인</h1>
+
+    <!-- 로그인 실패 / 로그아웃 알림 -->
+    <div class="alert alert-danger" th:if="${param.error}">이메일 또는 비밀번호가 올바르지 않습니다.</div>
+    <div class="alert alert-success" th:if="${param.logout}">로그아웃되었습니다.</div>
+
+    <!-- th:action 사용 시 Spring Security가 CSRF 토큰 hidden 필드를 자동 주입 -->
+    <form method="post" th:action="@{/login}">
+        <div class="mb-3">
+            <input type="email" name="email" class="form-control" placeholder="이메일" required autofocus>
+        </div>
+        <div class="mb-3">
+            <input type="password" name="password" class="form-control" placeholder="비밀번호" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">로그인</button>
+    </form>
+    <p class="text-center mt-3 mb-0">
+        아직 회원이 아니신가요? <a th:href="@{/members/join}">회원가입</a>
+    </p>
+</main>
+<script></script>
+</body>
+</html>

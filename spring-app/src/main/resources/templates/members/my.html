@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko" th:replace="~{layout :: layout(~{::title}, ~{::main}, ~{::script})}">
+<head>
+    <title>내 정보</title>
+</head>
+<body>
+<!-- D3(SR-03): 내 정보 조회 -->
+<main class="container py-5" style="max-width: 480px;">
+    <h1 class="h3 mb-4">내 정보</h1>
+    <table class="table">
+        <tbody>
+        <tr><th style="width:30%">이름</th><td th:text="${member.name}">이름</td></tr>
+        <tr><th>이메일</th><td th:text="${member.email}">이메일</td></tr>
+        <tr><th>가입유형</th><td th:text="${member.provider}">LOCAL</td></tr>
+        </tbody>
+    </table>
+    <a class="btn btn-primary" th:href="@{/members/my/edit}">정보 수정</a>
+</main>
+<script></script>
+</body>
+</html>
