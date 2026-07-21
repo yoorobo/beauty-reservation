@@ -27,8 +27,10 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    // 빈 문자열 → null 변환: 수정 시 비밀번호를 비우면 @Size(min) 위반 없이 기존 유지 [B3]
-    @InitBinder
+    // 빈 문자열 → null 변환: 수정폼(memberUpdateForm) 전용 [B3]
+    // 이름 지정으로 join의 memberForm은 제외 — 가입폼은 강사 검증 동작(빈값 시
+    // @NotBlank+@Size 메시지 2개) 유지, 수정폼은 비밀번호 비우면 기존 유지
+    @InitBinder("memberUpdateForm")
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
