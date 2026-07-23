@@ -13,15 +13,26 @@
     <div class="alert alert-success" th:if="${param.logout}">로그아웃되었습니다.</div>
 
     <!-- th:action 사용 시 Spring Security가 CSRF 토큰 hidden 필드를 자동 주입 -->
-    <form method="post" th:action="@{/login}">
-        <div class="mb-3">
-            <input type="email" name="email" class="form-control" placeholder="이메일" required autofocus>
+    <form method="post" th:action="@{/login}" class="vstack gap-3">
+        <div>
+            <label for="email" class="form-label">이메일</label>
+            <input type="email" id="email" name="email" class="form-control" required autofocus>
         </div>
-        <div class="mb-3">
-            <input type="password" name="password" class="form-control" placeholder="비밀번호" required>
+        <div>
+            <label for="password" class="form-label">비밀번호</label>
+            <input type="password" id="password" name="password" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-primary w-100">로그인</button>
     </form>
+
+    <!-- D4(SR-03): 카카오 OAuth2 로그인 (oauth2Login 인가 엔드포인트) -->
+    <div class="text-center my-3 text-muted">또는</div>
+    <a th:href="@{/oauth2/authorization/kakao}"
+       class="btn w-100"
+       style="background-color:#FEE500; color:#191600;">
+        카카오 로그인
+    </a>
+
     <p class="text-center mt-3 mb-0">
         아직 회원이 아니신가요? <a th:href="@{/members/join}">회원가입</a>
     </p>

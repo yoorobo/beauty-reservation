@@ -1,6 +1,10 @@
 HELP.md
 .gradle
 build/
+
+# 임시 디버그 로그 (WO-0722-02 v3 진단용 — 토큰/요청정보 포함 가능, 커밋 금지)
+bootrun-debug.log
+*.log
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
