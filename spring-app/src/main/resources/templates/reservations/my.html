@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" th:replace="~{layout :: layout(~{::title}, ~{::main}, ~{::script})}">
+<head>
+    <title>내 예약</title>
+</head>
+<body>
+<!-- D5(SR-07): 내 예약 목록 — 상태 배지 + REQUESTED/CONFIRMED만 수정·취소 노출, 취소는 POST -->
+<main class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">내 예약</h1>
+        <a class="btn btn-primary" th:href="@{/reservations/new}">예약하기</a>
+    </div>
+
+    <table class="table table-hover align-middle">
+        <thead>
+        <tr>
+            <th>날짜</th><th>시간</th><th>시술</th><th>디자이너</th><th>상태</th><th class="text-end">액션</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${reservations}">
+            <td th:text="${#temporals.format(r.reservationDate, 'yyyy-MM-dd')}">2026-07-25</td>
+            <td th:text="${#temporals.format(r.reservationTime, 'HH:mm')}">14:00</td>
+            <td th:text="${r.beautyService.serviceName}">시술</td>
+            <td th:text="${r.designer.name}">디자이너</td>
+            <td>
+                <!-- 상태별 배지 색 구분 -->
+                <span class="badge"
+                      th:classappend="${r.status.name() == 'REQUESTED'} ? 'bg-warning text-dark' :
+                                      (${r.status.name() == 'CONFIRMED'} ? 'bg-primary' :
+                                      (${r.status.name() == 'COMPLETED'} ? 'bg-success' :
+                                      (${r.status.name() == 'CANCELED'} ? 'bg-secondary' : 'bg-danger')))"
+                      th:text="${r.status}">상태</span>
+            </td>
+            <td class="text-end">
+                <!-- REQUESTED/CONFIRMED 상태만 수정·취소 노출 -->
+                <div th:if="${r.status.name() == 'REQUESTED' or r.status.name() == 'CONFIRMED'}"
+                     class="d-inline">
+                    <a class="btn btn-sm btn-outline-secondary"
+                       th:href="@{/reservations/{id}/edit(id=${r.id})}">수정</a>
+                    <form class="d-inline" method="post"
+                          th:action="@{/reservations/{id}/cancel(id=${r.id})}"
+                          onsubmit="return confirm('예약을 취소하시겠습니까?');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">취소</button>
+                    </form>
+                </div>
+                <span th:unless="${r.status.name() == 'REQUESTED' or r.status.name() == 'CONFIRMED'}"
+                      class="text-secondary small">—</span>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(reservations)}">
+            <td colspan="6" class="text-center text-secondary">예약 내역이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<script></script>
+</body>
+</html>

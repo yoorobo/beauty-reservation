@@ -13,10 +13,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto align-items-lg-center">
-                <!-- TODO D5: 예약하기·내 예약 (예약 엔티티 생성 후 연결) -->
-                <li class="nav-item"><a class="nav-link" href="#">예약하기</a></li>
+                <!-- D5(SR-07): 예약하기·내 예약 연결 (인증 분기 구조 유지) -->
+                <li class="nav-item"><a class="nav-link" th:href="@{/reservations/new}">예약하기</a></li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" href="#">내 예약</a>
+                    <a class="nav-link" th:href="@{/reservations/my}">내 예약</a>
                 </li>
 
                 <!-- ADMIN 전용 관리자 메뉴 -->
