@@ -6,52 +6,62 @@
 <body>
 <!-- D3(SR-03): 관리자 대시보드 (카드 4종) -->
 <main class="container py-4">
-    <h1 class="h3 mb-4">관리자 대시보드</h1>
+    <h1 class="h3 mb-2">관리자 대시보드</h1>
+    <p class="text-muted mb-4">예약, 회원, 서비스, 디자이너 정보를 관리할 수 있습니다.</p>
+    <!-- 강사 대비 의도적 차이: 모바일 1열 반응형(col-12 col-md-6) — 우리 반응형 원칙 유지 -->
     <div class="row g-3">
-        <!-- 예약 관리: D5 예정 (링크 #) -->
-        <div class="col-12 col-md-6 col-lg-3">
-            <a href="#" class="text-decoration-none text-reset">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">예약 관리</h5>
-                        <p class="card-text text-secondary mb-0">
-                            예약 현황·승인 <span class="badge bg-secondary">D5 예정</span></p>
+        <!-- 예약 관리: D5 예정 (미구현 → 버튼 disabled) -->
+        <div class="col-12 col-md-6">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title mb-0">예약 관리</h5>
+                        <i class="bi bi-calendar-check fs-2 text-primary"></i>
                     </div>
+                    <p class="card-text text-secondary">예약 조회, 상태 변경, 취소 처리</p>
+                    <a href="#" class="btn btn-primary w-100 mt-auto disabled" aria-disabled="true"
+                       tabindex="-1">예약 관리 <span class="badge bg-secondary">D5 예정</span></a>
                 </div>
-            </a>
+            </div>
         </div>
         <!-- 회원 관리 -->
-        <div class="col-12 col-md-6 col-lg-3">
-            <a th:href="@{/admin/members}" class="text-decoration-none text-reset">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">회원 관리</h5>
-                        <p class="card-text text-secondary mb-0">회원 목록·수정·삭제</p>
+        <div class="col-12 col-md-6">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title mb-0">회원 관리</h5>
+                        <i class="bi bi-people-fill fs-2 text-primary"></i>
                     </div>
+                    <p class="card-text text-secondary">회원 목록, 회원 정보 수정, 회원 삭제</p>
+                    <a th:href="@{/admin/members}" class="btn btn-primary w-100 mt-auto">회원 관리</a>
                 </div>
-            </a>
+            </div>
         </div>
         <!-- 서비스 관리 -->
-        <div class="col-12 col-md-6 col-lg-3">
-            <a th:href="@{/admin/services}" class="text-decoration-none text-reset">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">서비스 관리</h5>
-                        <p class="card-text text-secondary mb-0">시술 등록·수정·삭제</p>
+        <div class="col-12 col-md-6">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title mb-0">서비스 관리</h5>
+                        <i class="bi bi-scissors fs-2 text-primary"></i>
                     </div>
+                    <p class="card-text text-secondary">서비스 등록, 수정, 삭제</p>
+                    <a th:href="@{/admin/services}" class="btn btn-primary w-100 mt-auto">서비스 관리</a>
                 </div>
-            </a>
+            </div>
         </div>
         <!-- 디자이너 관리 -->
-        <div class="col-12 col-md-6 col-lg-3">
-            <a th:href="@{/admin/designers}" class="text-decoration-none text-reset">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">디자이너 관리</h5>
-                        <p class="card-text text-secondary mb-0">디자이너 등록·수정·삭제</p>
+        <div class="col-12 col-md-6">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title mb-0">디자이너 관리</h5>
+                        <i class="bi bi-person-badge fs-2 text-primary"></i>
                     </div>
+                    <p class="card-text text-secondary">디자이너 등록, 수정, 삭제</p>
+                    <a th:href="@{/admin/designers}" class="btn btn-primary w-100 mt-auto">디자이너 관리</a>
                 </div>
-            </a>
+            </div>
         </div>
     </div>
 </main>
