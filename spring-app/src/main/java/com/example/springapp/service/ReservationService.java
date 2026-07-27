@@ -87,10 +87,16 @@ public class ReservationService {
     }
 
     // D6(SR-11): 관리자 상태 변경 — 소유자 검증 없음(관리자 권한은 SecurityConfig에서 보장)
+    // [WO-0727-11] 미래 예약 완료/노쇼 방지: COMPLETED·NO_SHOW는 예약일이 오늘 이하일 때만 허용
+    //   (날짜 기준·당일 허용 — 당일 완료 처리 필요. 승인/취소는 날짜 제약 없음. 위반 시 예외로 상태 불변)
     @Transactional
     public void changeStatus(Long id, ReservationStatus status) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다. id=" + id));
+        if ((status == ReservationStatus.COMPLETED || status == ReservationStatus.NO_SHOW)
+                && reservation.getReservationDate().isAfter(LocalDate.now())) {
+            throw new IllegalStateException("미래 예약은 완료/노쇼 처리할 수 없습니다.");
+        }
         reservation.setStatus(status);
     }
 }

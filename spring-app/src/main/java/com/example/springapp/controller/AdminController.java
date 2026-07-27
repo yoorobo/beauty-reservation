@@ -52,7 +52,12 @@ public class AdminController {
                                @RequestParam(required = false) String date,
                                @RequestParam(required = false) String filterStatus,
                                RedirectAttributes redirectAttributes) {
-        reservationService.changeStatus(id, status);
+        // [WO-0727-11] 상태 전이 규칙 위반(미래 예약 완료/노쇼)은 서비스가 예외로 거부 → flash 안내, 상태 불변
+        try {
+            reservationService.changeStatus(id, status);
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
         // 검색조건 유지 (빈 값은 제외)
         if (date != null && !date.isBlank()) {
             redirectAttributes.addAttribute("date", date);

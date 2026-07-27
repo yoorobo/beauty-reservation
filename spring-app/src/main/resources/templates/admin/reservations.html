@@ -17,6 +17,9 @@
         </div>
     </div>
 
+    <!-- [WO-0727-11] 상태 전이 규칙 위반 등 서버 거부 메시지 (flash, 상태 미변경) -->
+    <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}">오류 메시지</div>
+
     <!-- 검색바 한 줄: 날짜 + 상태 + 검색 (기존 폼 표준 반응형 col-12 col-lg) -->
     <form method="get" th:action="@{/admin/reservations}" class="row g-2 align-items-end mb-2">
         <div class="col-12 col-lg">
