@@ -68,12 +68,29 @@
                           placeholder="요청 사항이 있으면 입력하세요 (선택)" th:field="*{requestMemo}"></textarea>
             </div>
 
-            <!-- 버튼 -->
-            <div class="col-12 d-flex gap-2">
-                <button type="submit" class="btn btn-primary"
-                        th:classappend="${reservationForm.id} != null ? 'btn-warning' : 'btn-primary'"
-                        th:text="${reservationForm.id} != null ? '수정' : '예약하기'">예약하기</button>
-                <a class="btn btn-outline-secondary" th:href="@{/reservations/my}">내 예약</a>
+            <!-- 버튼: 신규=전체폭 CTA + 이탈 링크 / 수정=반반 2개 (강사 화면 정렬) -->
+            <div class="col-12">
+                <!-- 수정 모드: [수정 취소] [수정 완료] 각 50%
+                     "취소"는 예약 취소로 오해될 수 있어 "수정 취소"로 명시 -->
+                <div class="row g-2" th:if="${reservationForm.id} != null">
+                    <div class="col-6">
+                        <a class="btn btn-outline-secondary w-100"
+                           th:href="@{/reservations/my}">수정 취소</a>
+                    </div>
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-primary w-100">수정 완료</button>
+                    </div>
+                </div>
+
+                <!-- 신규 모드: [예약 요청] 전체폭 CTA + 이탈 경로(tertiary 링크)
+                     보조 액션은 시각 무게를 최소화해 primary CTA를 방해하지 않도록 배치 -->
+                <div th:unless="${reservationForm.id} != null">
+                    <button type="submit" class="btn btn-primary w-100">예약 요청</button>
+                    <div class="text-center mt-3">
+                        <a class="link-secondary small text-decoration-none"
+                           th:href="@{/reservations/my}">내 예약으로 돌아가기</a>
+                    </div>
+                </div>
             </div>
         </div>
     </form>

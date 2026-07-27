@@ -29,12 +29,12 @@
                      th:errors="*{serviceName}">시술명 오류</div>
             </div>
             <div class="col-12 col-md">
-                <input type="number" class="form-control" placeholder="가격" th:field="*{price}">
+                <input type="number" class="form-control" placeholder="가격(원)" th:field="*{price}">
                 <div class="text-danger small" th:if="${#fields.hasErrors('price')}"
                      th:errors="*{price}">가격 오류</div>
             </div>
             <div class="col-12 col-md">
-                <input type="number" class="form-control" placeholder="소요시간" th:field="*{duration}">
+                <input type="number" class="form-control" placeholder="소요시간(분)" th:field="*{duration}">
                 <div class="text-danger small" th:if="${#fields.hasErrors('duration')}"
                      th:errors="*{duration}">소요시간 오류</div>
             </div>
@@ -56,11 +56,20 @@
     <!-- 목록 (폼 아래) : 헤더행 없이 데이터 행만 [B3·S4] -->
     <hr class="my-4">
     <table class="table">
+        <!-- WO-0723-10 A2: 헤더행 추가 — 어느 값이 무엇인지 식별 가능하게 -->
+        <thead>
+        <tr>
+            <th>시술명</th><th>가격(원)</th><th>소요시간(분)</th><th>설명</th><th class="text-end">관리</th>
+        </tr>
+        </thead>
         <tbody>
         <tr th:each="service : ${services}">
             <td th:text="${service.serviceName}">시술</td>
-            <td th:text="${service.price}">가격</td>
-            <td th:text="${service.duration}">시간</td>
+            <!-- WO-0723-10 A3: 천단위 콤마 + "원" -->
+            <td th:text="${#numbers.formatInteger(service.price, 3, 'COMMA')} + '원'">20,000원</td>
+            <!-- WO-0723-10 A3: 소요시간 "분" 표기 -->
+            <td th:text="${service.duration} + '분'">40분</td>
+            <td th:text="${service.description}">설명</td>
             <td class="text-end">
                 <a class="btn btn-sm btn-outline-secondary"
                    th:href="@{/admin/services/{id}/edit(id=${service.id})}">수정</a>
@@ -72,7 +81,7 @@
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(services)}">
-            <td colspan="4" class="text-center text-secondary">등록된 시술이 없습니다.</td>
+            <td colspan="5" class="text-center text-secondary">등록된 시술이 없습니다.</td>
         </tr>
         </tbody>
     </table>
