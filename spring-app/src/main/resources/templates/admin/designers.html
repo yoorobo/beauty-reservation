@@ -29,18 +29,24 @@
                      th:errors="*{name}">이름 오류</div>
             </div>
             <div class="col-12 col-md">
-                <!-- 전문 분야: 직접 입력 → 드롭다운 선택 (빈 값이면 @NotBlank 검증 작동) -->
-                <select class="form-select" th:field="*{specialty}">
-                    <option value="">전문 분야 선택</option>
-                    <option value="헤어">헤어</option>
-                    <option value="피부관리">피부관리</option>
-                    <option value="네일">네일</option>
-                    <option value="메이크업">메이크업</option>
-                    <option value="왁싱">왁싱</option>
-                    <option value="속눈썹">속눈썹</option>
-                    <option value="두피케어">두피케어</option>
-                    <option value="웨딩케어">웨딩케어</option>
-                </select>
+                <!-- 전문 분야: 자유 입력(text) + datalist 추천 [WO-0727-07, SR-11]
+                     드롭다운 고정 옵션은 DB 실제 값과 불일치 시 수정 저장에서 값이 조용히 훼손됨.
+                     → th:field 유지로 기존 값 그대로 표시, datalist는 강제 아닌 추천(임의 입력 허용).
+                     빈 값이면 서버 @NotBlank 검증 작동(값 목록 제한 아님). -->
+                <input type="text" class="form-control" placeholder="전문 분야"
+                       list="specialtyOptions" th:field="*{specialty}">
+                <datalist id="specialtyOptions">
+                    <option value="커트·남성 스타일링"></option>
+                    <option value="여성 커트·레이어드"></option>
+                    <option value="펌·볼륨매직"></option>
+                    <option value="셋팅펌·남성펌"></option>
+                    <option value="염색·컬러 디자인"></option>
+                    <option value="탈색·톤업"></option>
+                    <option value="두피케어·클리닉"></option>
+                    <option value="헤어 트리트먼트"></option>
+                    <option value="드라이·업스타일"></option>
+                    <option value="데일리 스타일링"></option>
+                </datalist>
                 <div class="text-danger small" th:if="${#fields.hasErrors('specialty')}"
                      th:errors="*{specialty}">전문분야 오류</div>
             </div>
