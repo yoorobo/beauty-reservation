@@ -34,6 +34,12 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+# [WO-0727-09] 관리자 초기 비밀번호 — 소스 하드코딩 제거, 환경변수(ADMIN_INITIAL_PASSWORD) 주입
+# 미설정 시 빈 문자열 → DataInitializer가 admin 시드를 건너뜀(경고 로그)
+app:
+  admin:
+    initial-password: ${ADMIN_INITIAL_PASSWORD:}
+
 logging:
   level:
     org.hibernate.SQL: debug   #Hibernate가 실행하는 SQL 문을 출력
