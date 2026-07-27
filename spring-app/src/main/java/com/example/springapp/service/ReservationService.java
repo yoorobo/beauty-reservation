@@ -10,6 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 // D5(SR-07): 예약 생성·조회·수정·취소. 취소는 삭제가 아니라 상태변경(CANCELED)로 이력 보존.
@@ -66,5 +67,30 @@ public class ReservationService {
     public void cancel(Long id, Member member) {
         Reservation reservation = findOwn(id, member);
         reservation.setStatus(ReservationStatus.CANCELED);
+    }
+
+    // D6(SR-11): 관리자 예약 조회 — date/status 조합(둘 다면 AND, 없으면 전체)
+    public List<Reservation> findForAdmin(LocalDate date, ReservationStatus status) {
+        if (date != null && status != null) {
+            return reservationRepository
+                    .findByReservationDateAndStatusOrderByReservationDateDescReservationTimeDesc(date, status);
+        }
+        if (date != null) {
+            return reservationRepository
+                    .findByReservationDateOrderByReservationDateDescReservationTimeDesc(date);
+        }
+        if (status != null) {
+            return reservationRepository
+                    .findByStatusOrderByReservationDateDescReservationTimeDesc(status);
+        }
+        return reservationRepository.findAllByOrderByReservationDateDescReservationTimeDesc();
+    }
+
+    // D6(SR-11): 관리자 상태 변경 — 소유자 검증 없음(관리자 권한은 SecurityConfig에서 보장)
+    @Transactional
+    public void changeStatus(Long id, ReservationStatus status) {
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다. id=" + id));
+        reservation.setStatus(status);
     }
 }

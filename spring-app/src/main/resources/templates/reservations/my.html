@@ -8,7 +8,7 @@
 <main class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0">내 예약</h1>
-        <a class="btn btn-primary" th:href="@{/reservations/new}">예약하기</a>
+        <a class="btn btn-primary" th:href="@{/reservations/new}">새 예약</a>
     </div>
 
     <table class="table table-hover align-middle">
@@ -30,7 +30,7 @@
                                       (${r.status.name() == 'CONFIRMED'} ? 'bg-primary' :
                                       (${r.status.name() == 'COMPLETED'} ? 'bg-success' :
                                       (${r.status.name() == 'CANCELED'} ? 'bg-secondary' : 'bg-danger')))"
-                      th:text="${r.status}">상태</span>
+                      th:text="${r.status.label}">상태</span>
             </td>
             <td class="text-end">
                 <!-- REQUESTED/CONFIRMED 상태만 수정·취소 노출 -->
