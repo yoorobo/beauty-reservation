@@ -28,7 +28,9 @@
                 <label class="form-label" for="serviceId">시술</label>
                 <select class="form-select" id="serviceId" th:field="*{serviceId}">
                     <option value="">시술을 선택하세요</option>
-                    <option th:each="s : ${services}" th:value="${s.id}" th:text="${s.serviceName}">시술</option>
+                    <!-- R5: 시술명 · 가격(천단위 콤마)원 · 소요시간분 -->
+                    <option th:each="s : ${services}" th:value="${s.id}"
+                            th:text="${s.serviceName} + ' · ' + ${#numbers.formatInteger(s.price, 3, 'COMMA')} + '원 · ' + ${s.duration} + '분'">시술 · 25,000원 · 40분</option>
                 </select>
                 <div class="text-danger small" th:if="${#fields.hasErrors('serviceId')}"
                      th:errors="*{serviceId}">시술 오류</div>
@@ -39,7 +41,9 @@
                 <label class="form-label" for="designerId">디자이너</label>
                 <select class="form-select" id="designerId" th:field="*{designerId}">
                     <option value="">디자이너를 선택하세요</option>
-                    <option th:each="d : ${designers}" th:value="${d.id}" th:text="${d.name}">디자이너</option>
+                    <!-- R6: 전문 분야 함께 표시. specialty 비어있으면 이름만(빈 구분자 노출 금지) -->
+                    <option th:each="d : ${designers}" th:value="${d.id}"
+                            th:text="${!#strings.isEmpty(d.specialty)} ? (${d.name} + ' · ' + ${d.specialty}) : ${d.name}">디자이너 · 커트/펌</option>
                 </select>
                 <div class="text-danger small" th:if="${#fields.hasErrors('designerId')}"
                      th:errors="*{designerId}">디자이너 오류</div>
@@ -48,15 +52,64 @@
             <!-- 예약 날짜 -->
             <div class="col-12 col-lg-6">
                 <label class="form-label" for="reservationDate">예약 날짜</label>
-                <input type="date" class="form-control" id="reservationDate" th:field="*{reservationDate}">
+                <!-- R4: 과거 선택 차단(min=오늘). 서버 @FutureOrPresent는 유지(클라 제약은 보안 아님) -->
+                <input type="date" class="form-control" id="reservationDate" th:field="*{reservationDate}" th:min="${today}">
                 <div class="text-danger small" th:if="${#fields.hasErrors('reservationDate')}"
                      th:errors="*{reservationDate}">날짜 오류</div>
             </div>
 
-            <!-- 예약 시간 -->
-            <div class="col-12 col-lg-6">
-                <label class="form-label" for="reservationTime">예약 시간</label>
-                <input type="time" class="form-control" id="reservationTime" th:field="*{reservationTime}">
+            <!-- 예약 시간 (WO-03 A1: select → 오전/오후 버튼 그리드. 슬롯은 WO-02 컨트롤러 SSOT timeSlots 재사용, 재구현 아님) -->
+            <div class="col-12"
+                 th:with="selectedTime=${reservationForm.reservationTime != null ? #temporals.format(reservationForm.reservationTime, 'HH:mm') : ''}">
+                <label class="form-label">예약 시간</label>
+                <!-- 선택 값은 hidden으로 전송 (JS가 버튼 클릭 시 갱신). 검증오류·수정모드에도 값 보존 -->
+                <input type="hidden" th:field="*{reservationTime}">
+
+                <!-- 오전 (12:00 이전) -->
+                <div class="mb-2">
+                    <div class="text-secondary small mb-1">오전</div>
+                    <div class="row g-2">
+                        <!-- 반응형: 모바일 3열(col-4) / 태블릿 4열(col-md-3) / 데스크톱 6열(col-lg-2) -->
+                        <div class="col-4 col-md-3 col-lg-2"
+                             th:each="slot : ${timeSlots}" th:if="${slot lt '12:00'}">
+                            <button type="button" class="btn w-100 slot-btn"
+                                    th:classappend="${slot == selectedTime} ? 'btn-primary' : 'btn-outline-secondary'"
+                                    th:attr="data-slot=${slot},aria-pressed=${slot == selectedTime}"
+                                    th:text="${slot}">10:00</button>
+                        </div>
+                        <!-- A3: 레거시(비슬롯) 기존 시각 — 오전에 해당하면 여기 -->
+                        <div class="col-4 col-md-3 col-lg-2"
+                             th:if="${legacySlot != null and legacySlot lt '12:00'}">
+                            <button type="button" class="btn w-100 slot-btn"
+                                    th:classappend="${legacySlot == selectedTime} ? 'btn-primary' : 'btn-outline-secondary'"
+                                    th:attr="data-slot=${legacySlot},aria-pressed=${legacySlot == selectedTime}"
+                                    th:text="${legacySlot} + ' 기존'">10:49 기존</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 오후 (12:00 이후) -->
+                <div>
+                    <div class="text-secondary small mb-1">오후</div>
+                    <div class="row g-2">
+                        <div class="col-4 col-md-3 col-lg-2"
+                             th:each="slot : ${timeSlots}" th:if="${slot ge '12:00'}">
+                            <button type="button" class="btn w-100 slot-btn"
+                                    th:classappend="${slot == selectedTime} ? 'btn-primary' : 'btn-outline-secondary'"
+                                    th:attr="data-slot=${slot},aria-pressed=${slot == selectedTime}"
+                                    th:text="${slot}">14:00</button>
+                        </div>
+                        <!-- A3: 레거시(비슬롯) 기존 시각 — 오후에 해당하면 여기 -->
+                        <div class="col-4 col-md-3 col-lg-2"
+                             th:if="${legacySlot != null and legacySlot ge '12:00'}">
+                            <button type="button" class="btn w-100 slot-btn"
+                                    th:classappend="${legacySlot == selectedTime} ? 'btn-primary' : 'btn-outline-secondary'"
+                                    th:attr="data-slot=${legacySlot},aria-pressed=${legacySlot == selectedTime}"
+                                    th:text="${legacySlot} + ' 기존'">13:30 기존</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="text-danger small" th:if="${#fields.hasErrors('reservationTime')}"
                      th:errors="*{reservationTime}">시간 오류</div>
             </div>
@@ -95,6 +148,25 @@
         </div>
     </form>
 </main>
-<script></script>
+<script>
+    // WO-03 A1/A2: 슬롯 버튼 그리드 — 클릭 시 hidden(reservationTime) 갱신 + 선택 스타일/aria 토글.
+    // 초기 선택 상태는 서버(th:classappend)가 렌더하므로 JS 미동작 시에도 수정/검증오류 선택은 보존됨.
+    (function () {
+        var hidden = document.getElementById('reservationTime');
+        if (!hidden) { return; }
+        var buttons = document.querySelectorAll('.slot-btn');
+        buttons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                hidden.value = btn.getAttribute('data-slot');
+                buttons.forEach(function (b) {
+                    var on = (b === btn);
+                    b.classList.toggle('btn-primary', on);
+                    b.classList.toggle('btn-outline-secondary', !on);
+                    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            });
+        });
+    })();
+</script>
 </body>
 </html>
