@@ -4,3 +4,4 @@ build/
 *.iml
 .env
 reports/*.md
+.claude/
