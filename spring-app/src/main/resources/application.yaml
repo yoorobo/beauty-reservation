@@ -39,6 +39,10 @@ spring:
 app:
   admin:
     initial-password: ${ADMIN_INITIAL_PASSWORD:}
+  # [WO-0729-17] /api/** 인증용 API Key — 기본값을 두지 않는다.
+  #   환경변수 API_KEY 미설정 시 플레이스홀더 해석 실패로, 빈 값이면 @NotBlank 위반으로 기동이 중단된다(fail-fast).
+  api:
+    key: ${API_KEY}
 
 logging:
   level:

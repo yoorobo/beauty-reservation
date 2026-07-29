@@ -1,0 +1,11 @@
+# [WO-0729-17] 생성물·비밀값만 무시한다.
+# .env.example / requirements.txt / *.py 는 커밋 대상이므로 여기에 넣지 않는다.
+
+.venv/
+.env
+
+# 생성된 엑셀 보고서(생성물 경로만 — *.xlsx 전역 무시 아님)
+reports/*.xlsx
+
+__pycache__/
+*.pyc
