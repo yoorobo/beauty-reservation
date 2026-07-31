@@ -8,6 +8,7 @@ C7: 파일명은 고정값만 사용한다 — 고객 이름·이메일 등 개�
 DataFrame 컬럼명은 D7 DTO의 JSON 키(camelCase)를 그대로 쓴다.
 """
 
+from io import BytesIO
 from pathlib import Path
 
 import pandas as pd
@@ -85,6 +86,15 @@ def _save_single(df: pd.DataFrame, filename: str, sheet_name: str) -> Path:
     path = ensure_reports_dir() / filename
     df.to_excel(path, index=False, sheet_name=sheet_name, engine="openpyxl")
     return path
+
+
+def to_excel_bytes(df: pd.DataFrame, sheet_name: str) -> bytes:
+    """검증·정제된 DataFrame을 디스크에 저장하지 않고 XLSX bytes로 반환한다."""
+    safe_df = sanitize_dataframe(df)
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine="openpyxl") as writer:
+        safe_df.to_excel(writer, index=False, sheet_name=sheet_name)
+    return output.getvalue()
 
 
 def save_combined(frames: dict) -> Path:
